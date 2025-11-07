@@ -5,27 +5,27 @@ import Link from 'next/link';
 
 export default function Navbar() {
   return (
-    <nav className="bg-gradient-to-r from-red-700 to-red-600 text-white shadow-lg">
-      <div className="container mx-auto px-4 py-4">
+    <nav className="border-b border-gray-200 bg-white">
+      <div className="container mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-8">
-            <Link href="/" className="text-2xl font-bold hover:text-red-100 transition">
-              🐻 BRBs
+          <div className="flex items-center space-x-12">
+            <Link href="/" className="text-xl font-medium text-gray-900 hover:text-gray-600 transition">
+              BRBs
             </Link>
-            <div className="hidden md:flex space-x-6">
-              <Link href="/" className="hover:text-red-100 transition">
+            <div className="hidden md:flex space-x-8 text-sm">
+              <Link href="/" className="text-gray-600 hover:text-gray-900 transition">
                 Dashboard
               </Link>
-              <Link href="/swap" className="hover:text-red-100 transition">
+              <Link href="/swap" className="text-gray-600 hover:text-gray-900 transition">
                 Swap
               </Link>
-              <Link href="/transactions" className="hover:text-red-100 transition">
-                Transactions
+              <Link href="/transactions" className="text-gray-600 hover:text-gray-900 transition">
+                History
               </Link>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
-            <WalletMultiButton className="!bg-white !text-red-700 hover:!bg-red-50 !transition" />
+          <div>
+            <WalletMultiButton className="!bg-gray-900 !text-white hover:!bg-gray-800 !text-sm !py-2 !px-4 !rounded" />
           </div>
         </div>
       </div>
