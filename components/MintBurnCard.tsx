@@ -61,22 +61,22 @@ export default function MintBurnCard() {
 
   if (!connected) {
     return (
-      <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
+      <div className="bg-gray-900 border border-gray-800 rounded-lg p-8 text-center">
         <p className="text-gray-500 text-sm mb-2">Connect wallet to continue</p>
-        <p className="text-xs text-gray-400">1 BRB = $1 USDC</p>
+        <p className="text-xs text-gray-600">1 BRB = $1 USDC</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6">
-      <div className="flex border-b border-gray-200 mb-6">
+    <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+      <div className="flex border-b border-gray-800 mb-6">
         <button
           onClick={() => setActiveTab('mint')}
           className={`flex-1 py-3 text-sm font-medium transition ${
             activeTab === 'mint'
-              ? 'text-red-600 border-b-2 border-red-600'
-              : 'text-gray-400 hover:text-gray-600'
+              ? 'text-red-500 border-b-2 border-red-500'
+              : 'text-gray-500 hover:text-gray-400'
           }`}
         >
           Mint
@@ -85,8 +85,8 @@ export default function MintBurnCard() {
           onClick={() => setActiveTab('burn')}
           className={`flex-1 py-3 text-sm font-medium transition ${
             activeTab === 'burn'
-              ? 'text-red-600 border-b-2 border-red-600'
-              : 'text-gray-400 hover:text-gray-600'
+              ? 'text-red-500 border-b-2 border-red-500'
+              : 'text-gray-500 hover:text-gray-400'
           }`}
         >
           Burn
@@ -105,12 +105,12 @@ export default function MintBurnCard() {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="0"
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:border-gray-400 focus:outline-none text-lg font-light"
+                className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg focus:border-red-500 focus:outline-none text-lg font-light text-white"
                 disabled={loading}
               />
-              <span className="absolute right-4 top-3 text-gray-400 text-sm">USDC</span>
+              <span className="absolute right-4 top-3 text-gray-500 text-sm">USDC</span>
             </div>
-            <p className="text-xs text-gray-400 mt-2">
+            <p className="text-xs text-gray-600 mt-2">
               Receive {amount || '0'} BRBs
             </p>
           </div>
@@ -118,13 +118,13 @@ export default function MintBurnCard() {
           <button
             onClick={handleMint}
             disabled={loading || !amount}
-            className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-300 text-white text-sm py-3 rounded-lg transition"
+            className="w-full bg-red-600 hover:bg-red-500 disabled:bg-gray-800 text-white text-sm py-3 rounded-lg transition"
           >
             {loading ? 'Processing...' : 'Mint BRBs'}
           </button>
 
-          <div className="bg-gray-50 border border-gray-100 rounded-lg p-4">
-            <p className="text-xs text-gray-600">
+          <div className="bg-black border border-gray-800 rounded-lg p-4">
+            <p className="text-xs text-gray-500">
               Deposit USDC to mint BRBs at 1:1. Your USDC is held as collateral.
             </p>
           </div>
@@ -141,12 +141,12 @@ export default function MintBurnCard() {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="0"
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:border-red-600 focus:outline-none text-lg font-light"
+                className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg focus:border-red-500 focus:outline-none text-lg font-light text-white"
                 disabled={loading}
               />
-              <span className="absolute right-4 top-3 text-gray-400 text-sm">BRBs</span>
+              <span className="absolute right-4 top-3 text-gray-500 text-sm">BRBs</span>
             </div>
-            <p className="text-xs text-gray-400 mt-2">
+            <p className="text-xs text-gray-600 mt-2">
               Receive ${amount || '0'} USDC
             </p>
           </div>
@@ -154,13 +154,13 @@ export default function MintBurnCard() {
           <button
             onClick={handleBurn}
             disabled={loading || !amount}
-            className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-300 text-white text-sm py-3 rounded-lg transition"
+            className="w-full bg-red-600 hover:bg-red-500 disabled:bg-gray-800 text-white text-sm py-3 rounded-lg transition"
           >
             {loading ? 'Processing...' : 'Burn BRBs'}
           </button>
 
-          <div className="bg-gray-50 border border-gray-100 rounded-lg p-4">
-            <p className="text-xs text-gray-600">
+          <div className="bg-black border border-gray-800 rounded-lg p-4">
+            <p className="text-xs text-gray-500">
               Burning is permanent. Receive USDC back at 1:1 ratio.
             </p>
           </div>
@@ -171,8 +171,8 @@ export default function MintBurnCard() {
         <div
           className={`mt-4 p-3 rounded-lg border ${
             txStatus.type === 'success'
-              ? 'bg-green-50 border-green-200 text-green-700'
-              : 'bg-red-50 border-red-200 text-red-700'
+              ? 'bg-green-950 border-green-800 text-green-400'
+              : 'bg-red-950 border-red-800 text-red-400'
           }`}
         >
           <p className="text-xs">{txStatus.message}</p>

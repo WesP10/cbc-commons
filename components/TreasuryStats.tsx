@@ -22,39 +22,39 @@ export default function TreasuryStats() {
   }, []);
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6">
-      <h2 className="text-lg font-medium mb-6 text-gray-900">Treasury</h2>
+    <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+      <h2 className="text-lg font-medium mb-6 text-white">Treasury</h2>
       
       <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
         <div>
           <p className="text-xs text-gray-500 mb-2">Collateral</p>
-          <p className="text-xl font-light text-gray-900">
+          <p className="text-xl font-light text-gray-300">
             ${stats.totalCollateral.toLocaleString()}
           </p>
         </div>
 
         <div>
           <p className="text-xs text-gray-500 mb-2">Supply</p>
-          <p className="text-xl font-light text-gray-900">
+          <p className="text-xl font-light text-gray-300">
             {stats.totalSupply.toLocaleString()}
           </p>
         </div>
 
         <div>
           <p className="text-xs text-gray-500 mb-2">Ratio</p>
-          <p className="text-xl font-light text-gray-900">{stats.collateralRatio}%</p>
+          <p className="text-xl font-light text-gray-300">{stats.collateralRatio}%</p>
         </div>
 
         <div>
           <p className="text-xs text-gray-500 mb-2">Status</p>
-          <p className="text-xl font-light text-gray-900">
+          <p className="text-xl font-light text-gray-300">
             {stats.isPaused ? 'Paused' : 'Active'}
           </p>
         </div>
       </div>
 
-      <div className="mt-6 pt-4 border-t border-gray-100">
-        <p className="text-xs text-gray-400">
+      <div className="mt-6 pt-4 border-t border-gray-800">
+        <p className="text-xs text-gray-600">
           Connect smart contract to view live data
         </p>
       </div>
