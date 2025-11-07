@@ -12,7 +12,7 @@ export default function Home() {
         {/* Hero Section */}
         <div className="max-w-3xl mb-16">
           <h1 className="text-4xl font-light text-gray-900 mb-4">
-            Cornell Digital Currency
+            <span className="text-red-600">Cornell</span> Digital Currency
           </h1>
           <p className="text-gray-600 leading-relaxed">
             BRBs is a stablecoin on Solana representing Cornell&apos;s Big Red Bucks. 
@@ -38,7 +38,7 @@ export default function Home() {
         {/* Footer */}
         <div className="border-t border-gray-200 pt-8">
           <p className="text-xs text-gray-400 text-center">
-            Built on Solana • 1:1 USDC backed • Open source
+            Built on Solana • 1:1 USDC backed • <span className="text-red-600">Cornell Blockchain</span>
           </p>
         </div>
       </main>

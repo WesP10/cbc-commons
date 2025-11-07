@@ -28,13 +28,13 @@ export default function BalanceCard() {
       
       {loading ? (
         <div className="flex justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600"></div>
         </div>
       ) : (
         <div className="space-y-4">
           <div className="py-4 border-b border-gray-100">
             <p className="text-xs text-gray-500 mb-2">BRB</p>
-            <p className="text-2xl font-light text-gray-900">
+            <p className="text-2xl font-light text-red-600">
               {brbBalance.toFixed(2)}
             </p>
           </div>
@@ -48,7 +48,7 @@ export default function BalanceCard() {
 
           <button
             onClick={refreshBalances}
-            className="w-full mt-2 py-2 text-sm text-gray-600 hover:text-gray-900 transition"
+            className="w-full mt-2 py-2 text-sm text-gray-600 hover:text-red-600 transition"
           >
             Refresh
           </button>

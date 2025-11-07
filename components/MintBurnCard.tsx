@@ -75,7 +75,7 @@ export default function MintBurnCard() {
           onClick={() => setActiveTab('mint')}
           className={`flex-1 py-3 text-sm font-medium transition ${
             activeTab === 'mint'
-              ? 'text-gray-900 border-b-2 border-gray-900'
+              ? 'text-red-600 border-b-2 border-red-600'
               : 'text-gray-400 hover:text-gray-600'
           }`}
         >
@@ -85,7 +85,7 @@ export default function MintBurnCard() {
           onClick={() => setActiveTab('burn')}
           className={`flex-1 py-3 text-sm font-medium transition ${
             activeTab === 'burn'
-              ? 'text-gray-900 border-b-2 border-gray-900'
+              ? 'text-red-600 border-b-2 border-red-600'
               : 'text-gray-400 hover:text-gray-600'
           }`}
         >
@@ -118,7 +118,7 @@ export default function MintBurnCard() {
           <button
             onClick={handleMint}
             disabled={loading || !amount}
-            className="w-full bg-gray-900 hover:bg-gray-800 disabled:bg-gray-300 text-white text-sm py-3 rounded-lg transition"
+            className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-300 text-white text-sm py-3 rounded-lg transition"
           >
             {loading ? 'Processing...' : 'Mint BRBs'}
           </button>
@@ -141,7 +141,7 @@ export default function MintBurnCard() {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="0"
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:border-gray-400 focus:outline-none text-lg font-light"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:border-red-600 focus:outline-none text-lg font-light"
                 disabled={loading}
               />
               <span className="absolute right-4 top-3 text-gray-400 text-sm">BRBs</span>
@@ -154,7 +154,7 @@ export default function MintBurnCard() {
           <button
             onClick={handleBurn}
             disabled={loading || !amount}
-            className="w-full bg-gray-900 hover:bg-gray-800 disabled:bg-gray-300 text-white text-sm py-3 rounded-lg transition"
+            className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-300 text-white text-sm py-3 rounded-lg transition"
           >
             {loading ? 'Processing...' : 'Burn BRBs'}
           </button>
