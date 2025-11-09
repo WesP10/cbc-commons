@@ -10,7 +10,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center gap-8">
             <Link href="/" className="text-lg font-semibold text-gray-900 hover:text-red-600 transition">
-              BRBs
+              Commons
             </Link>
             <Link href="/transactions" className="text-sm text-gray-600 hover:text-gray-900 transition">
               Transactions

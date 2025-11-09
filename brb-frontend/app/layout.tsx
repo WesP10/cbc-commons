@@ -6,7 +6,7 @@ import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "BRBs - Cornell Digital Currency",
+  title: "Commons - Cornell Digital Currency",
   description: "Tokenized Cornell Big Red Bucks on Solana",
 };
 
