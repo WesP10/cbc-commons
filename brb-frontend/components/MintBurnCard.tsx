@@ -26,7 +26,7 @@ export default function MintBurnCard() {
       const tx = await depositAndMint(parseFloat(amount));
       setTxStatus({ 
         type: 'success', 
-        message: `Successfully minted ${amount} BRBs! TX: ${tx.slice(0, 8)}...` 
+        message: `Successfully minted ${amount} BRBs!` 
       });
       setAmount('');
     } catch (error: any) {
@@ -48,7 +48,7 @@ export default function MintBurnCard() {
       const tx = await burnAndRedeem(parseFloat(amount));
       setTxStatus({ 
         type: 'success', 
-        message: `Successfully redeemed ${amount} USDC! TX: ${tx.slice(0, 8)}...` 
+        message: `Successfully redeemed ${amount} USDC!` 
       });
       setAmount('');
     } catch (error: any) {
@@ -59,34 +59,26 @@ export default function MintBurnCard() {
     }
   };
 
-  if (!connected) {
-    return (
-      <div className="bg-gray-900 border border-gray-800 rounded-lg p-8 text-center">
-        <p className="text-gray-500 text-sm mb-2">Connect wallet to continue</p>
-        <p className="text-xs text-gray-600">1 BRB = $1 USDC</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
-      <div className="flex border-b border-gray-800 mb-6">
+    <div className="bg-white border border-gray-200 rounded-3xl shadow-sm p-4">
+      {/* Tabs */}
+      <div className="flex gap-2 mb-4">
         <button
           onClick={() => setActiveTab('mint')}
-          className={`flex-1 py-3 text-sm font-medium transition ${
+          className={`flex-1 py-2 px-4 rounded-2xl text-sm font-medium transition ${
             activeTab === 'mint'
-              ? 'text-red-500 border-b-2 border-red-500'
-              : 'text-gray-500 hover:text-gray-400'
+              ? 'bg-gray-100 text-gray-900'
+              : 'text-gray-500 hover:text-gray-900'
           }`}
         >
           Mint
         </button>
         <button
           onClick={() => setActiveTab('burn')}
-          className={`flex-1 py-3 text-sm font-medium transition ${
+          className={`flex-1 py-2 px-4 rounded-2xl text-sm font-medium transition ${
             activeTab === 'burn'
-              ? 'text-red-500 border-b-2 border-red-500'
-              : 'text-gray-500 hover:text-gray-400'
+              ? 'bg-gray-100 text-gray-900'
+              : 'text-gray-500 hover:text-gray-900'
           }`}
         >
           Burn
@@ -94,91 +86,130 @@ export default function MintBurnCard() {
       </div>
 
       {activeTab === 'mint' ? (
-        <div className="space-y-4">
-          <div>
-            <label className="block text-xs text-gray-500 mb-3">
-              Amount
-            </label>
-            <div className="relative">
+        <div className="space-y-3">
+          {/* Input */}
+          <div className="bg-gray-50 rounded-2xl p-4">
+            <div className="flex justify-between mb-2">
+              <span className="text-xs text-gray-500">You pay</span>
+            </div>
+            <div className="flex items-center">
               <input
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="0"
-                className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg focus:border-red-500 focus:outline-none text-lg font-light text-white"
-                disabled={loading}
+                className="flex-1 bg-transparent text-2xl font-light outline-none"
+                disabled={loading || !connected}
               />
-              <span className="absolute right-4 top-3 text-gray-500 text-sm">USDC</span>
+              <span className="text-sm font-medium text-gray-900">USDC</span>
             </div>
-            <p className="text-xs text-gray-600 mt-2">
-              Receive {amount || '0'} BRBs
-            </p>
           </div>
 
-          <button
-            onClick={handleMint}
-            disabled={loading || !amount}
-            className="w-full bg-red-600 hover:bg-red-500 disabled:bg-gray-800 text-white text-sm py-3 rounded-lg transition"
-          >
-            {loading ? 'Processing...' : 'Mint BRBs'}
-          </button>
-
-          <div className="bg-black border border-gray-800 rounded-lg p-4">
-            <p className="text-xs text-gray-500">
-              Deposit USDC to mint BRBs at 1:1. Your USDC is held as collateral.
-            </p>
+          {/* Arrow */}
+          <div className="flex justify-center">
+            <div className="text-gray-400">↓</div>
           </div>
+
+          {/* Output */}
+          <div className="bg-gray-50 rounded-2xl p-4">
+            <div className="flex justify-between mb-2">
+              <span className="text-xs text-gray-500">You receive</span>
+            </div>
+            <div className="flex items-center">
+              <span className="flex-1 text-2xl font-light text-gray-400">
+                {amount || '0'}
+              </span>
+              <span className="text-sm font-medium text-red-600">BRB</span>
+            </div>
+          </div>
+
+          {/* Button */}
+          {connected ? (
+            <button
+              onClick={handleMint}
+              disabled={loading || !amount}
+              className="w-full bg-red-600 hover:bg-red-500 disabled:bg-gray-200 text-white disabled:text-gray-400 font-medium py-4 rounded-2xl transition"
+            >
+              {loading ? 'Processing...' : 'Mint BRBs'}
+            </button>
+          ) : (
+            <div className="w-full bg-gray-100 text-gray-500 text-center font-medium py-4 rounded-2xl">
+              Connect wallet
+            </div>
+          )}
         </div>
       ) : (
-        <div className="space-y-4">
-          <div>
-            <label className="block text-xs text-gray-500 mb-3">
-              Amount
-            </label>
-            <div className="relative">
+        <div className="space-y-3">
+          {/* Input */}
+          <div className="bg-gray-50 rounded-2xl p-4">
+            <div className="flex justify-between mb-2">
+              <span className="text-xs text-gray-500">You burn</span>
+            </div>
+            <div className="flex items-center">
               <input
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="0"
-                className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg focus:border-red-500 focus:outline-none text-lg font-light text-white"
-                disabled={loading}
+                className="flex-1 bg-transparent text-2xl font-light outline-none"
+                disabled={loading || !connected}
               />
-              <span className="absolute right-4 top-3 text-gray-500 text-sm">BRBs</span>
+              <span className="text-sm font-medium text-red-600">BRB</span>
             </div>
-            <p className="text-xs text-gray-600 mt-2">
-              Receive ${amount || '0'} USDC
-            </p>
           </div>
 
-          <button
-            onClick={handleBurn}
-            disabled={loading || !amount}
-            className="w-full bg-red-600 hover:bg-red-500 disabled:bg-gray-800 text-white text-sm py-3 rounded-lg transition"
-          >
-            {loading ? 'Processing...' : 'Burn BRBs'}
-          </button>
-
-          <div className="bg-black border border-gray-800 rounded-lg p-4">
-            <p className="text-xs text-gray-500">
-              Burning is permanent. Receive USDC back at 1:1 ratio.
-            </p>
+          {/* Arrow */}
+          <div className="flex justify-center">
+            <div className="text-gray-400">↓</div>
           </div>
+
+          {/* Output */}
+          <div className="bg-gray-50 rounded-2xl p-4">
+            <div className="flex justify-between mb-2">
+              <span className="text-xs text-gray-500">You receive</span>
+            </div>
+            <div className="flex items-center">
+              <span className="flex-1 text-2xl font-light text-gray-400">
+                {amount || '0'}
+              </span>
+              <span className="text-sm font-medium text-gray-900">USDC</span>
+            </div>
+          </div>
+
+          {/* Button */}
+          {connected ? (
+            <button
+              onClick={handleBurn}
+              disabled={loading || !amount}
+              className="w-full bg-red-600 hover:bg-red-500 disabled:bg-gray-200 text-white disabled:text-gray-400 font-medium py-4 rounded-2xl transition"
+            >
+              {loading ? 'Processing...' : 'Burn BRBs'}
+            </button>
+          ) : (
+            <div className="w-full bg-gray-100 text-gray-500 text-center font-medium py-4 rounded-2xl">
+              Connect wallet
+            </div>
+          )}
         </div>
       )}
 
+      {/* Status Message */}
       {txStatus.type && (
         <div
-          className={`mt-4 p-3 rounded-lg border ${
+          className={`mt-3 p-3 rounded-2xl text-xs ${
             txStatus.type === 'success'
-              ? 'bg-green-950 border-green-800 text-green-400'
-              : 'bg-red-950 border-red-800 text-red-400'
+              ? 'bg-green-50 text-green-700'
+              : 'bg-red-50 text-red-700'
           }`}
         >
-          <p className="text-xs">{txStatus.message}</p>
+          {txStatus.message}
         </div>
       )}
+
+      {/* Rate Info */}
+      <div className="mt-4 text-xs text-gray-400 text-center">
+        1 BRB = 1 USDC
+      </div>
     </div>
   );
 }
-
