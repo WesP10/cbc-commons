@@ -7,11 +7,16 @@
     "lint:fix": "prettier */*.js \"*/**/*{.js,.ts}\" -w",
     "lint": "prettier */*.js \"*/**/*{.js,.ts}\" --check",
     "test": "anchor test",
+    "test:local": "anchor test",
+    "test:devnet": "anchor test --provider.cluster devnet",
     "build": "anchor build",
     "deploy": "anchor deploy",
+    "deploy:devnet": "anchor deploy --provider.cluster devnet",
     "deploy:init": "node migrations/deploy.js",
     "cli": "node cli/treasury-cli.js",
-    "example": "node examples/basic-usage.js"
+    "example": "node examples/basic-usage.js",
+    "check-setup": "./check-setup.sh",
+    "run-tests": "./run-tests.sh"
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.28.0",
