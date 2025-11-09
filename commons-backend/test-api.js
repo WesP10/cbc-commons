@@ -32,17 +32,6 @@ async function testCornellBRBBalance() {
   }
 }
 
-async function testGetAccount() {
-  console.log('\n📊 Testing GET Account Info...');
-  try {
-    const res = await axios.post(`${API_BASE}/api/balance/get-account`, {
-      sessionId: TEST_SESSION_ID
-    });
-    console.log('✅ All Balances:', res.data);
-  } catch (error) {
-    console.error('❌ Failed:', error.response?.data || error.message);
-  }
-}
 
 async function testTransactionHistory() {
   console.log('\n📜 Testing Transaction History...');
@@ -75,7 +64,6 @@ async function runTests() {
   
   await testHealthCheck();
   await testCornellBRBBalance();
-  await testGetAccount();
   await testTransactionHistory();
   await testCombinedBalance();
   

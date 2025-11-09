@@ -36,33 +36,6 @@ router.post('/cornell-brb', async (req, res) => {
   }
 });
 
-/**
- * Get all GET account balances
- */
-router.post('/get-account', async (req, res) => {
-  try {
-    const { sessionId } = req.body;
-
-    if (!sessionId) {
-      return res.status(400).json({ error: 'Session ID required' });
-    }
-
-    const balances = await getService.getAllBalances(sessionId);
-
-    res.json({
-      success: true,
-      balances,
-      timestamp: new Date()
-    });
-
-  } catch (error) {
-    console.error('Error fetching GET account:', error);
-    res.status(500).json({ 
-      error: 'Failed to fetch GET account',
-      message: error.message 
-    });
-  }
-});
 
 /**
  * Get combined balances (Cornell + Crypto)
