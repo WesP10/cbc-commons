@@ -14,13 +14,10 @@ Integrate Cornell GET Mobile API to fetch real BRB balances and transaction hist
 
 **Query:**
 ```graphql
-query GetAccountInfo($sessionId: String!) {
+query GetBRBInfo($sessionId: String!) {
   accountInfo(id: $sessionId) {
     brb           # Cornell BRB balance
-    cityBucks     # City Bucks balance
-    swipes        # Meal swipes
-    laundry       # Laundry credits
-    history {
+    history {     # BRB transaction history
       amount
       name
       timestamp
@@ -46,19 +43,16 @@ class GETService {
     this.apiUrl = 'http://eatery-backend.cornellappdev.com/graphQL';
   }
 
-  async getAccountInfo(sessionId) {
+  async getBRBInfo(sessionId) {
     const query = `
       query {
         accountInfo(id: "${sessionId}") {
           brb
-          cityBucks
           history {
             amount
             name
             timestamp
           }
-          laundry
-          swipes
         }
       }
     `;
@@ -75,13 +69,13 @@ class GETService {
   }
 
   async getBRBBalance(sessionId) {
-    const accountInfo = await this.getAccountInfo(sessionId);
-    return accountInfo.brb;
+    const info = await this.getBRBInfo(sessionId);
+    return parseFloat(info.brb) || 0;
   }
 
   async getTransactionHistory(sessionId) {
-    const accountInfo = await this.getAccountInfo(sessionId);
-    return accountInfo.history;
+    const info = await this.getBRBInfo(sessionId);
+    return info.history || [];
   }
 }
 
@@ -145,26 +139,26 @@ router.post('/link', authenticate, async (req, res) => {
 });
 ```
 
-### Step 3: Fetch Combined Balances
+### Step 3: Fetch Combined BRB Balances
 
 ```javascript
 // backend/routes/balance.js
-router.get('/combined', authenticate, async (req, res) => {
-  const user = await User.findById(req.user._id);
+router.post('/combined', async (req, res) => {
+  const { sessionId, walletAddress } = req.body;
   
-  // Get real Cornell BRB balance from GET
-  const realBRB = await getService.getBRBBalance(user.getSessionId);
+  // Get Cornell BRB balance from GET
+  let cornellBRB = 0;
+  if (sessionId) {
+    cornellBRB = await getService.getBRBBalance(sessionId);
+  }
   
   // Get crypto BRB balance from Solana blockchain
-  const cryptoBRB = await solanaService.getTokenBalance(
-    user.walletAddress,
-    BRB_TOKEN_MINT
-  );
+  const cryptoBRB = 0; // TODO: Fetch from Solana
   
   res.json({
-    realBRB,           // From Cornell GET system
+    cornellBRB,        // From Cornell GET system
     cryptoBRB,         // From Solana blockchain
-    total: realBRB + cryptoBRB
+    total: cornellBRB + cryptoBRB
   });
 });
 ```
@@ -176,45 +170,34 @@ router.get('/combined', authenticate, async (req, res) => {
 ### Display Combined Balances
 
 ```typescript
-// brb-frontend/components/CombinedBalance.tsx
-'use client';
+// brb-frontend/hooks/useCornellBRB.ts
+import { useState, useCallback } from 'react';
 
-import { useEffect, useState } from 'react';
+export function useCornellBRB() {
+  const [cornellBalance, setCornellBalance] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-export default function CombinedBalance() {
-  const [balances, setBalances] = useState({
-    realBRB: 0,      // From Cornell GET
-    cryptoBRB: 0,    // From Solana blockchain
-    total: 0
-  });
-
-  useEffect(() => {
-    fetchBalances();
+  const fetchBalance = useCallback(async (sessionId: string = 'mock') => {
+    setLoading(true);
+    try {
+      const res = await fetch('http://localhost:3002/api/balance/cornell-brb', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId })
+      });
+      const data = await res.json();
+      setCornellBalance(data.balance);
+      return data.balance;
+    } catch (error) {
+      console.error('Error fetching Cornell BRB:', error);
+      return 0;
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  const fetchBalances = async () => {
-    const res = await fetch('/api/balance/combined');
-    const data = await res.json();
-    setBalances(data);
-  };
-
-  return (
-    <div className="space-y-2">
-      <div className="flex justify-between text-sm">
-        <span className="text-gray-600">Cornell BRBs</span>
-        <span className="font-medium">{balances.realBRB.toFixed(2)}</span>
-      </div>
-      <div className="flex justify-between text-sm">
-        <span className="text-gray-600">Crypto BRBs</span>
-        <span className="font-medium">{balances.cryptoBRB.toFixed(2)}</span>
-      </div>
-      <div className="flex justify-between text-base font-semibold pt-2 border-t">
-        <span>Total BRBs</span>
-        <span className="text-red-600">{balances.total.toFixed(2)}</span>
-      </div>
-    </div>
-  );
-}
+  return { cornellBalance, loading, fetchBalance };
+};
 ```
 
 ### Transaction History from GET

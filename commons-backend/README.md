@@ -1,23 +1,21 @@
 # Commons Backend API
 
-Express backend for Cornell Commons - integrates with GET system and Solana blockchain.
+Express backend for Cornell Commons - fetches BRB data from Cornell GET system.
 
 ## Features
 
-- ✅ Cornell GET account integration via GraphQL
-- ✅ Fetch real BRB balances from Cornell system
-- ✅ Transaction history from GET
+- ✅ Cornell GET integration via GraphQL
+- ✅ Fetch BRB balances from Cornell system
+- ✅ BRB transaction history from GET
+- ✅ Mock mode for testing without session ID
+- ✅ Auto-fallback if GET API unavailable
 - 🚧 Solana blockchain integration (coming soon)
-- 🚧 MongoDB for user data (coming soon)
 
 ## Quick Start
 
 ```bash
 # Install dependencies
 npm install
-
-# Create environment file
-cp .env.example .env
 
 # Start server
 npm start
@@ -27,154 +25,81 @@ Server runs on: `http://localhost:3002`
 
 ## API Endpoints
 
-### Balance APIs
-
-**Get Cornell BRB Balance**
-```bash
+### Get Cornell BRB Balance
+```
 POST /api/balance/cornell-brb
-Content-Type: application/json
-
-{
-  "sessionId": "your-get-session-id"
-}
 ```
 
-**Get All GET Account Balances**
-```bash
-POST /api/balance/get-account
-Content-Type: application/json
-
-{
-  "sessionId": "your-get-session-id"
-}
+### Get BRB Transaction History
 ```
-
-Response:
-```json
-{
-  "success": true,
-  "balances": {
-    "brb": 150.50,
-    "cityBucks": 25.00,
-    "swipes": 5,
-    "laundry": 10.00
-  }
-}
-```
-
-**Get Combined Balances (Cornell + Crypto)**
-```bash
-POST /api/balance/combined
-Content-Type: application/json
-
-{
-  "sessionId": "your-get-session-id",
-  "walletAddress": "solana-wallet-address"
-}
-```
-
-### Transaction APIs
-
-**Get Cornell Transaction History**
-```bash
 POST /api/transactions/get-history
-Content-Type: application/json
-
-{
-  "sessionId": "your-get-session-id"
-}
 ```
 
-Response:
-```json
-{
-  "success": true,
-  "transactions": [
-    {
-      "amount": -12.50,
-      "description": "Okenshields Dining",
-      "timestamp": "2024-11-09T12:30:00Z",
-      "type": "debit",
-      "source": "cornell-get"
-    }
-  ],
-  "count": 50
-}
+### Get Combined Balance (Cornell + Crypto)
+```
+POST /api/balance/combined
 ```
 
-## Testing the API
+See [HOW-TO-USE.md](./HOW-TO-USE.md) for detailed API documentation.
 
-### Using curl
+## What We Fetch
 
-```bash
-# Test health check
-curl http://localhost:3002/health
+**From Cornell GET System:**
+- ✅ BRB balance
+- ✅ BRB transaction history
 
-# Test GET balance (requires valid session ID)
-curl -X POST http://localhost:3002/api/balance/cornell-brb \
-  -H "Content-Type: application/json" \
-  -d '{"sessionId": "your-session-id"}'
-```
+**Focused on BRB only** - no city bucks, swipes, or laundry data.
 
-### Using Postman
+## Tech Stack
 
-1. Import as collection
-2. Set base URL: `http://localhost:3002`
-3. Test endpoints with your GET session ID
-
-## How to Get Session ID
-
-**From GET Mobile App:**
-1. Download "CBORD GET" app
-2. Login with Cornell NetID + DUO
-3. Extract session ID (developer mode/network inspection)
-
-**Note:** Session IDs expire - users need to re-login periodically.
-
-## Integration with Frontend
-
-Update your Next.js frontend to call these APIs:
-
-```typescript
-// brb-frontend/hooks/useCornellBalance.ts
-const fetchCornellBalance = async (sessionId: string) => {
-  const res = await fetch('http://localhost:3002/api/balance/cornell-brb', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ sessionId })
-  });
-  
-  const data = await res.json();
-  return data.balance;
-};
-```
-
-## Future Enhancements
-
-- [ ] User authentication (JWT)
-- [ ] MongoDB integration
-- [ ] Solana blockchain queries
-- [ ] Wallet linking
-- [ ] Session management
-- [ ] Rate limiting
-- [ ] Error logging
-
-## Dependencies
-
-- **express** - Web framework
-- **cors** - Cross-origin requests
-- **axios** - HTTP client
-- **graphql-request** - GraphQL client
-- **mongoose** - MongoDB ODM
-- **dotenv** - Environment variables
+- **Express** - Web framework
+- **GraphQL Request** - Query Cornell API
+- **Axios** - HTTP client
+- **CORS** - Cross-origin requests
+- **Mongoose** - MongoDB (future)
 
 ## Cornell GET API
 
-Uses Cornell AppDev's Eatery backend:
-- Endpoint: `http://eatery-backend.cornellappdev.com/graphQL`
-- Documentation: https://bible.cornellappdev.com/api/eatery#get-login
+Uses Cornell AppDev's Eatery backend to fetch BRB data:
+- **Endpoint:** `http://eatery-backend.cornellappdev.com/graphQL`
+- **Docs:** https://bible.cornellappdev.com/api/eatery#get-login
+
+## Mock Mode
+
+For testing without real GET session:
+- Use sessionId: `"mock"` or `"test-session-id"`
+- Returns realistic fake data
+- Perfect for development
+
+## Integration
+
+Integrated with Commons frontend at `http://localhost:3001`
+
+Frontend fetches:
+1. Cornell BRB balance from backend
+2. Crypto BRB balance from Solana
+3. Combined total for display
+
+## Testing
+
+```bash
+# Run test suite
+node test-api.js
+
+# Test individual endpoint
+curl -X POST http://localhost:3002/api/balance/cornell-brb \
+  -H "Content-Type: application/json" \
+  -d '{"sessionId": "mock"}'
+```
+
+## Next Steps
+
+- [ ] Get real GET session ID for live data
+- [ ] Add MongoDB for user storage
+- [ ] Implement Solana blockchain queries
+- [ ] Add authentication & session management
+- [ ] Deploy to production
 
 ## License
 
 MIT
-

@@ -35,29 +35,7 @@ curl -X POST http://localhost:3002/api/balance/cornell-brb \
 }
 ```
 
-### 2. Get All GET Account Info
-
-**Request:**
-```bash
-curl -X POST http://localhost:3002/api/balance/get-account \
-  -H "Content-Type: application/json" \
-  -d '{"sessionId": "mock"}'
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "balances": {
-    "brb": 150.50,
-    "cityBucks": 25.00,
-    "swipes": 5,
-    "laundry": 10.00
-  }
-}
-```
-
-### 3. Get Transaction History
+### 2. Get BRB Transaction History
 
 **Request:**
 ```bash
@@ -83,6 +61,25 @@ curl -X POST http://localhost:3002/api/transactions/get-history \
 }
 ```
 
+### 3. Get Combined Balance (Cornell + Crypto)
+
+**Request:**
+```bash
+curl -X POST http://localhost:3002/api/balance/combined \
+  -H "Content-Type": "application/json" \
+  -d '{"sessionId": "mock", "walletAddress": "optional"}'
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "cornellBRB": 150.50,
+  "cryptoBRB": 0,
+  "total": 150.50
+}
+```
+
 ---
 
 ## 🧪 Testing with Mock Data
@@ -94,7 +91,7 @@ curl -X POST http://localhost:3002/api/transactions/get-history \
 node test-api.js
 ```
 
-This returns fake Cornell data for testing your frontend without needing real GET access.
+This returns fake Cornell BRB data for testing your frontend without needing real GET access.
 
 ---
 
@@ -119,105 +116,76 @@ curl -X POST http://localhost:3002/api/balance/cornell-brb \
 
 ## 🔗 Frontend Integration
 
-### Update Frontend to Call Backend
+Update your Next.js frontend to call backend:
 
 ```typescript
-// brb-frontend/hooks/useCornellBalance.ts
-export const useCornellBalance = () => {
-  const [cornellBRB, setCornellBRB] = useState(0);
-
-  const fetchCornellBalance = async (sessionId: string) => {
-    const res = await fetch('http://localhost:3002/api/balance/cornell-brb', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId })
-    });
-    
-    const data = await res.json();
-    setCornellBRB(data.balance);
-  };
-
-  return { cornellBRB, fetchCornellBalance };
+// brb-frontend/hooks/useCornellBRB.ts
+const fetchCornellBalance = async (sessionId: string) => {
+  const res = await fetch('http://localhost:3002/api/balance/cornell-brb', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ sessionId })
+  });
+  
+  const data = await res.json();
+  return data.balance; // Returns Cornell BRB balance
 };
 ```
 
-### Display in Frontend
+---
 
-```typescript
-// Show Cornell + Crypto balances
-const { cornellBRB } = useCornellBalance();
-const { cryptoBRB } = useTreasury();
+## 📊 What the Backend Fetches
 
-return (
-  <div>
-    <div>Cornell BRB: ${cornellBRB}</div>
-    <div>Crypto BRB: {cryptoBRB}</div>
-    <div>Total: ${cornellBRB + cryptoBRB}</div>
-  </div>
-);
+**From Cornell GET System:**
+- ✅ BRB balance only
+- ✅ BRB transaction history only
+
+**Does NOT fetch:**
+- ❌ City Bucks
+- ❌ Meal swipes
+- ❌ Laundry credits
+
+Focused solely on BRB data for the Commons platform.
+
+---
+
+## 🎯 API Summary
+
+| Endpoint | Purpose | Input | Output |
+|----------|---------|-------|--------|
+| POST /api/balance/cornell-brb | Get Cornell BRB | sessionId | BRB balance |
+| POST /api/transactions/get-history | Get BRB history | sessionId | Transactions |
+| POST /api/balance/combined | Combined balances | sessionId, wallet | Cornell + Crypto |
+
+---
+
+## 🔧 Testing
+
+```bash
+# Health check
+curl http://localhost:3002/health
+
+# Get BRB balance (mock)
+curl -X POST http://localhost:3002/api/balance/cornell-brb \
+  -H "Content-Type: application/json" \
+  -d '{"sessionId": "mock"}'
+
+# Run all tests
+node test-api.js
 ```
 
 ---
 
-## 📊 What You Can Do Now
+## 🚀 Production Deployment
 
-### With Mock Mode (Testing):
-- ✅ Test API endpoints
-- ✅ Build frontend integration
-- ✅ Develop UI for balances
-- ✅ Test transaction history display
+Deploy backend to:
+- Railway
+- Render
+- Heroku
+- AWS/GCP
 
-### With Real Session ID:
-- ✅ Fetch actual Cornell BRB balance
-- ✅ See real transaction history
-- ✅ Monitor Cornell account from Commons app
-- ✅ Compare Cornell vs Crypto BRBs
+Update frontend API_BASE to your deployed URL.
 
 ---
 
-## 🎯 Current Limitations
-
-**Session ID Challenge:**
-- Users need to manually get session ID from GET app
-- Session expires periodically
-- Not ideal UX
-
-**Solution (Future):**
-- Partner with Cornell IT
-- Get official OAuth/API access
-- Auto-authenticate users
-- Persistent sessions
-
----
-
-## 📁 Backend Structure
-
-```
-commons-backend/
-├── server.js                 ✅ Express server
-├── routes/
-│   ├── balance.js           ✅ Balance endpoints
-│   └── transactions.js      ✅ Transaction endpoints
-├── services/
-│   └── getService.js        ✅ GET GraphQL integration
-├── test-api.js              ✅ Test script
-├── .env.example             ✅ Config template
-├── README.md                ✅ Documentation
-└── package.json             ✅ Dependencies
-```
-
----
-
-## 🚀 Next Steps
-
-1. **Test with mock data** ✅ (Working now!)
-2. **Integrate frontend** - Connect to backend API
-3. **Get real session ID** - Test with actual GET account
-4. **Add MongoDB** - Store user accounts
-5. **Add authentication** - Session management
-
----
-
-**Your backend is running and ready to fetch Cornell BRB balances!** 
-
-To test with real data, you just need a GET session ID. Want me to update the frontend to connect to this backend? 🔗
+**Backend is ready and integrated with frontend!** 🎉

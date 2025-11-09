@@ -30,17 +30,18 @@ app.get('/', (req, res) => {
   res.json({
     name: 'Commons Backend API',
     version: '1.0.0',
+    description: 'Fetches Cornell BRB data via GET GraphQL API',
     endpoints: {
       balance: {
-        'POST /api/balance/cornell-brb': 'Get Cornell BRB balance from GET',
-        'POST /api/balance/get-account': 'Get all GET account balances',
-        'POST /api/balance/combined': 'Get Cornell + Crypto balances'
+        'POST /api/balance/cornell-brb': 'Get Cornell BRB balance',
+        'POST /api/balance/combined': 'Get Cornell + Crypto BRB balances'
       },
       transactions: {
-        'POST /api/transactions/get-history': 'Get Cornell transaction history',
+        'POST /api/transactions/get-history': 'Get BRB transaction history',
         'POST /api/transactions/combined': 'Get Cornell + Crypto transactions'
       }
-    }
+    },
+    note: 'Focused on BRB data only - no city bucks, swipes, or laundry'
   });
 });
 
