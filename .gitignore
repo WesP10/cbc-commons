@@ -11,3 +11,7 @@
 TESTING-READY.md
 PROJECT-STATUS.md
 backend-integration-plan.md
+
+# Local backend directory
+commons-backend/
+commons-backend-local/
