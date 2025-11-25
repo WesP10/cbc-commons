@@ -200,7 +200,7 @@ The service:
 ## Project Structure
 
 ```
-commons-backend-local/
+commons-backend/
 ├── server.js              # Express server setup
 ├── routes/
 │   ├── auth.js           # Authentication routes
@@ -208,6 +208,7 @@ commons-backend-local/
 │   └── transactions.js   # Transaction endpoints
 ├── services/
 │   └── getService.js     # GET API integration service
+├── test-api.js           # API testing script
 ├── package.json
 └── README.md
 ```

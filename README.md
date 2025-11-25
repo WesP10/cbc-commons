@@ -7,7 +7,7 @@ A full-stack decentralized platform for tokenizing Cornell's "Big Red Bucks" (BR
 The BRBs Stablecoin Platform consists of three main components:
 
 1. **Solana Smart Contract** (`brb-stablecoin/`) - Treasury program for minting/burning BRB tokens
-2. **Backend API** (`commons-backend-local/`) - REST API integrating with Cornell GET system
+2. **Backend API** (`commons-backend/`) - REST API integrating with Cornell GET system
 3. **Web Frontend** (`brb-frontend/`) - Next.js application for user interactions
 
 Together, these components create a seamless bridge between Cornell's traditional BRB system and the Solana blockchain ecosystem.
@@ -59,17 +59,18 @@ cbc-commons/
 │   ├── cli/                # CLI tools
 │   └── README.md           # Stablecoin-specific docs
 │
-├── commons-backend-local/   # Backend API (Express)
-│   ├── routes/             # API endpoints
+├── commons-backend/         # Backend API (Express)
+│   ├── routes/             # API endpoints (auth, balance, transactions)
 │   ├── services/           # GET API integration
 │   ├── server.js           # Express server
+│   ├── test-api.js         # API testing script
 │   └── README.md           # Backend-specific docs
 │
 └── brb-frontend/           # Web frontend (Next.js)
-    ├── app/                # Next.js pages
+    ├── app/                # Next.js pages (login, transactions)
     ├── components/         # React components
-    ├── hooks/              # React hooks
-    ├── utils/              # Utilities
+    ├── hooks/              # React hooks (useCornellBRB, useTreasury)
+    ├── utils/              # Utilities (sessionStorage)
     └── README.md           # Frontend-specific docs
 ```
 
@@ -88,14 +89,14 @@ cbc-commons/
 Each component has its own setup instructions. See the respective README files:
 
 - [Stablecoin README](./brb-stablecoin/README.md) - Solana program setup
-- [Backend README](./commons-backend-local/README.md) - API server setup
+- [Backend README](./commons-backend/README.md) - API server setup
 - [Frontend README](./brb-frontend/README.md) - Web app setup
 
 ### Running the Full Stack
 
 1. **Start Backend** (Terminal 1):
    ```bash
-   cd commons-backend-local
+   cd commons-backend
    npm install
    npm run dev  # Runs on http://localhost:3002
    ```
@@ -184,7 +185,7 @@ The platform uses a WebView-based authentication system:
 Each component has comprehensive documentation:
 
 - **[Stablecoin README](./brb-stablecoin/README.md)** - Smart contract details, deployment, testing
-- **[Backend README](./commons-backend-local/README.md)** - API endpoints, authentication, GET integration
+- **[Backend README](./commons-backend/README.md)** - API endpoints, authentication, GET integration
 - **[Frontend README](./brb-frontend/README.md)** - UI components, hooks, wallet integration
 
 ## Security Considerations
