@@ -2,6 +2,12 @@
 *.md
 !/README.md
 
+# Exclude planning/documentation files
+COMMIT_PLAN.md
+PR_MESSAGE.md
+COMMIT_SUMMARY.md
+FILES_TO_COMMIT.md
+
 # Local backend directory
 commons-backend/
 commons-backend-local/
