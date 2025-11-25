@@ -1,6 +1,7 @@
-# Ignore all markdown files except root README.md
+# Ignore all markdown files except root README.md and commons-backend/README.md
 *.md
 !/README.md
+!commons-backend/README.md
 
 # Exclude planning/documentation files
 COMMIT_PLAN.md
@@ -8,6 +9,5 @@ PR_MESSAGE.md
 COMMIT_SUMMARY.md
 FILES_TO_COMMIT.md
 
-# Local backend directory
-commons-backend/
+# Local backend directory (only commons-backend-local is excluded)
 commons-backend-local/
