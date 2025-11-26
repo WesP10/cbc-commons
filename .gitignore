@@ -1,0 +1,13 @@
+# Ignore all markdown files except README.md
+*.md
+!README.md
+
+# Keep project-specific READMEs
+!brb-stablecoin/README.md
+!brb-frontend/README.md
+!commons-backend/README.md
+
+# But exclude these specific docs
+TESTING-READY.md
+PROJECT-STATUS.md
+backend-integration-plan.md
