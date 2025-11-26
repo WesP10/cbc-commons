@@ -65,3 +65,13 @@ target/
 # OS
 .DS_Store
 Thumbs.db
+
+# Docker (keep configs, ignore volumes/temp)
+.docker/
+docker-volumes/
+*.dockerignore.bak
+
+# Keep these Docker files:
+# Dockerfile
+# docker-compose.yml
+# .dockerignore
