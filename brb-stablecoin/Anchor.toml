@@ -1,21 +1,24 @@
+[toolchain]
+anchor_version = "0.28.0"
+
 [features]
-seeds = false
+resolution = true
 skip-lint = false
 
 [programs.devnet]
-brb_treasury = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
-
-[programs.testnet]
-brb_treasury = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+brb_treasury = "2jxfDDCiLrBC9cAYjZfLnqujhF3AcGoGMJsUxgXhP1um"
 
 [programs.mainnet]
 brb_treasury = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+
+[programs.localnet]
+brb_treasury = "5kWRf7Zii2L1XDGDVTkWmkhDCgyP55xgq6XDob1SxcNM"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Devnet"
+cluster = "Localnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]

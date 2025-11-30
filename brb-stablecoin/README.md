@@ -1,250 +1,257 @@
-# BRBs Stablecoin Treasury Program
+# BRB Stablecoin Treasury
 
-A Solana program implementing a stablecoin treasury system for Cornell's "Big Red Bucks" (BRBs) using Anchor Framework.
+A Solana program implementing a fully-collateralized stablecoin treasury system for Cornell's "Big Red Bucks" (BRBs).
 
-## Overview
+> **🐳 NEW: Docker Setup Available!** For the most reliable, consistent development experience across all platforms, see **[DOCKER.md](./DOCKER.md)** for Docker-based setup. Recommended for Windows users!
 
-The BRBs Treasury Program enables:
-- **1:1 USDC-BRB Exchange**: Users can deposit USDC to mint BRBs and burn BRBs to redeem USDC
-- **Collateral Management**: Tracks total USDC collateral and BRB supply with 1:1 backing
-- **Admin Controls**: Pause/unpause functionality and parameter updates
-- **Transparent Operations**: All transactions are recorded on-chain
+## What is BRB Treasury?
 
-## Architecture
+The BRB Treasury Program enables 1:1 USDC-backed stablecoin functionality:
+- **Deposit USDC → Mint BRBs** at 1:1 ratio
+- **Burn BRBs → Redeem USDC** at 1:1 ratio
+- **Full Collateralization**: Every BRB is backed by exactly 1 USDC
+- **Admin Controls**: Pause/unpause functionality for emergency situations
 
-### Core Components
+---
 
-1. **Treasury State Account**: Stores vault addresses, collateral balance, and admin settings
-2. **BRB Token Mint**: SPL token representing Big Red Bucks (6 decimals)
-3. **USDC Vault**: Token account holding USDC collateral
-4. **Program Instructions**: Initialize, deposit/mint, burn/redeem, and admin functions
+## 🎯 Stable Versions (Battle-Tested)
 
-### Key Features
+| Tool | Version | Why? |
+|------|---------|------|
+| Anchor CLI | **0.30.1** | Most stable Anchor release |
+| Solana CLI | **1.18.26** | Proven compatibility with Anchor 0.30.1 |
+| Rust | **1.79.0** | Perfect compatibility (matches Anchor) |
+| Node.js | **20.x LTS** | Latest LTS release |
 
-- **1:1 Peg**: Every BRB is backed by exactly $1 worth of USDC
-- **Arbitrage Protection**: Mint/redeem mechanism maintains peg stability
-- **Admin Controls**: Emergency pause and parameter management
-- **Collateral Tracking**: Real-time monitoring of backing ratio
+**These versions are known to work perfectly together.** Used by thousands of production Solana projects.
 
-## Setup Instructions
+## 🐳 Setup Options
 
-### Prerequisites
+### Option 1: Docker (Recommended for Windows)
+**Best for:** Consistent environment, no version conflicts, easy setup
 
-1. **Install Rust**: https://rustup.rs/
-2. **Install Solana CLI**: https://docs.solana.com/cli/install-solana-cli-tools
-3. **Install Anchor**: https://www.anchor-lang.com/docs/installation
-4. **Install Node.js**: https://nodejs.org/
+```powershell
+# See DOCKER.md for full guide
+docker-compose build
+docker-compose up -d
+.\docker-build.ps1
+```
 
-### Installation
+✅ All dependencies pre-installed  
+✅ Works identically on Windows/Mac/Linux  
+✅ No WSL2 required  
+✅ Isolated from host system  
+
+**[→ Full Docker Guide](./DOCKER.md)**
+
+### Option 2: WSL2 (Traditional Method)
+
+---
+
+## 🚀 Quick Setup (Recommended: WSL2 on Windows)
+
+### Step 1: Get WSL2 (Windows Users Only)
+```powershell
+# Run in PowerShell as Administrator
+wsl --install
+# Restart computer, then open "Ubuntu" from Start menu
+```
+
+### Step 2: Automated Installation (Linux/Mac/WSL)
+```bash
+# Navigate to project
+cd "/mnt/c/Users/YOUR_USERNAME/Saved Games/cbc-commons/brb-stablecoin"
+
+# Run the installer
+chmod +x install.sh
+./install.sh
+
+# Reload your shell
+source ~/.bashrc
+```
+
+### Step 3: Verify & Build
+```bash
+# Check versions
+./check-versions.sh
+
+# Configure Solana
+solana config set --url devnet
+solana-keygen new
+solana airdrop 2
+
+# Build
+anchor build
+
+# Test
+anchor test
+```
+
+**That's it!** You're ready to develop.
+
+---
+
+## 📖 Detailed Setup Guide
+
+See **[SETUP.md](./SETUP.md)** for:
+- Step-by-step manual installation
+- Troubleshooting common issues
+- Windows native setup (not recommended)
+- VS Code + WSL integration
+
+---
+
+## 🔨 Building & Testing
 
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd brb-stablecoin
-
-# Install dependencies
-npm install
-
-# Build the program
-anchor build
+# Clean build (recommended)
+anchor clean && anchor build
 
 # Run tests
 anchor test
-```
 
-### Configuration
-
-1. **Set Solana cluster**:
-   ```bash
-   solana config set --url devnet
-   ```
-
-2. **Create wallet** (if needed):
-   ```bash
-   solana-keygen new --outfile ~/.config/solana/id.json
-   ```
-
-3. **Get devnet SOL**:
-   ```bash
-   solana airdrop 2
-   ```
-
-## Program Instructions
-
-### Initialize Treasury
-Creates the treasury state and BRB token mint.
-
-**Accounts:**
-- `treasury`: Treasury state account (PDA)
-- `brb_mint`: BRB token mint
-- `usdc_vault`: USDC collateral vault
-- `admin`: Treasury administrator
-
-### Deposit USDC & Mint BRBs
-Exchanges USDC for BRBs at 1:1 ratio.
-
-**Parameters:**
-- `amount`: Amount of USDC to deposit (in smallest units)
-
-**Accounts:**
-- `treasury`: Treasury state
-- `brb_mint`: BRB token mint
-- `usdc_vault`: USDC vault
-- `user_brb_account`: User's BRB token account
-- `user_usdc_account`: User's USDC token account
-- `user`: User signing the transaction
-
-### Burn BRBs & Redeem USDC
-Exchanges BRBs for USDC at 1:1 ratio.
-
-**Parameters:**
-- `amount`: Amount of BRBs to burn (in smallest units)
-
-**Accounts:**
-- Same as deposit instruction
-
-### Admin Functions
-
-#### Set Pause Status
-Pause or unpause the treasury.
-
-**Parameters:**
-- `is_paused`: Boolean pause status
-
-#### Update Treasury Parameters
-Update treasury configuration.
-
-**Parameters:**
-- `new_admin`: Optional new admin public key
-
-## Deployment
-
-### Deploy to Devnet
-
-```bash
-# Build and deploy
-anchor build
+# Deploy to devnet
+solana config set --url devnet
+solana airdrop 2
 anchor deploy
-
-# Initialize treasury (replace with your admin keypair)
-anchor run initialize-treasury
 ```
 
-### Program IDs
+---
 
-After deployment, update the program ID in:
-- `Anchor.toml`
-- `programs/brb-treasury/src/lib.rs` (declare_id!)
+## 📚 Program Architecture
 
-## Interaction Tools
-
-### Blockchain Explorers
-
-- **Solana Explorer**: https://explorer.solana.com/
-  - View transactions, accounts, and program data
-  - Search by program ID or account address
-
-- **Solscan**: https://solscan.io/
-  - User-friendly interface with better token visualization
-  - Real-time transaction monitoring
-
-### Wallets
-
-- **Phantom Wallet**: https://phantom.app/
-  - Add custom BRB token using mint address
-  - Send/receive BRBs and view balances
-
-- **Solflare Wallet**: https://solflare.com/
-  - Alternative wallet with token management
-  - Support for custom SPL tokens
-
-### Development Tools
-
-- **Station (Solana Playground)**: https://beta.solpg.io/
-  - Web IDE for interacting with Solana programs
-  - Test instructions without local setup
-
-- **Anchor Web UI**: https://www.anchor-lang.com/docs/anchor-by-example
-  - Generate UI from program IDL
-  - Interactive program testing
-
-## Usage Examples
-
-### Adding BRB Token to Wallet
-
-1. Open Phantom or Solflare wallet
-2. Go to "Add Custom Token"
-3. Enter the BRB mint address (from deployment)
-4. Token will appear in your wallet
-
-### Viewing Treasury State
-
-1. Go to Solana Explorer
-2. Search for treasury account address
-3. View collateral balance and BRB supply
-4. Monitor transaction history
-
-### Checking Token Balances
-
-1. Open wallet
-2. View BRB and USDC balances
-3. Use "Token Accounts" tab for detailed view
-
-## Program Architecture
-
-```
-Treasury State Account
-├── Admin Authority
-├── BRB Mint Address
-├── USDC Vault Address
-├── Total Collateral (USDC)
-├── Total BRB Supply
-├── Pause Status
-└── Bump Seed
+### Treasury State Account
+```rust
+Treasury {
+    admin: Pubkey,           // Administrator
+    brb_mint: Pubkey,        // BRB token mint
+    usdc_vault: Pubkey,      // USDC collateral vault
+    total_collateral: u64,   // Total USDC deposited
+    total_brb_supply: u64,   // Total BRBs minted
+    is_paused: bool,         // Emergency pause
+    bump: u8                 // PDA bump seed
+}
 ```
 
-## Security Considerations
+### Main Instructions
 
-- **Admin Controls**: Only authorized admin can pause/unpause
-- **Collateral Verification**: All operations verify sufficient collateral
-- **Access Control**: User must own token accounts for operations
-- **Pause Mechanism**: Emergency stop for all non-admin operations
+1. **initialize_treasury** - Create treasury, BRB mint, USDC vault
+2. **deposit_and_mint** - Deposit USDC, mint BRBs (1:1)
+3. **burn_and_redeem** - Burn BRBs, redeem USDC (1:1)
+4. **set_pause_status** - Pause/unpause (admin only)
+5. **update_treasury_params** - Update settings (admin only)
 
-## Testing
+See full code in `programs/brb-treasury/src/lib.rs`
 
-Run the comprehensive test suite:
+---
+
+## 🛠️ CLI Usage
 
 ```bash
-# Run all tests
-anchor test
+# Show treasury info
+npm run cli info
 
-# Run specific test
-npm test -- --grep "Deposit USDC and mint BRBs"
+# Check balance
+npm run cli balance <user-pubkey>
+
+# Deposit USDC and mint BRBs
+npm run cli deposit <keypair-path> <amount>
+
+# Burn BRBs and redeem USDC
+npm run cli redeem <keypair-path> <amount>
+
+# Pause treasury (admin only)
+npm run cli pause <admin-keypair-path>
 ```
 
-Test coverage includes:
-- Treasury initialization
-- Deposit/mint operations
-- Burn/redeem operations
-- Pause functionality
-- Access control
-- Edge cases and error handling
+---
 
-## Future Enhancements
+## 🐛 Troubleshooting
 
-- **Real USDC Integration**: Connect to actual USDC mint
-- **Multi-Collateral**: Support additional collateral types
-- **Interest Rates**: Implement lending/borrowing features
-- **Governance**: Community-driven parameter updates
-- **Analytics**: Enhanced monitoring and reporting
+### "anchor: command not found"
+```bash
+export PATH="$HOME/.cargo/bin:$PATH"
+source ~/.bashrc
+```
 
-## Support
+### "Insufficient SOL"
+```bash
+solana airdrop 2
+# Or use: https://solfaucet.com
+```
 
-For questions or issues:
-- Check the test suite for usage examples
-- Review Solana and Anchor documentation
-- Use blockchain explorers to debug transactions
+### Version mismatch errors
+```bash
+# Nuclear reset
+anchor clean
+rm -rf target node_modules package-lock.json
+npm install
+anchor build
+```
+
+### Build fails
+```bash
+# Check versions match exactly
+./check-versions.sh
+
+# Reinstall if needed
+./install.sh
+```
+
+---
+
+## 📖 Additional Resources
+
+- **Docker Setup Guide**: [DOCKER.md](./DOCKER.md) - Recommended for Windows
+- **WSL2 Setup Guide**: [SETUP.md](./SETUP.md) - Traditional method
+- **Anchor Docs**: https://www.anchor-lang.com/
+- **Solana Docs**: https://docs.solana.com/
+- **Solana Cookbook**: https://solanacookbook.com/
+
+---
+
+## 🔒 Security Notes
+
+### Development (Devnet)
+- ✅ Use test tokens only
+- ✅ Keep devnet keypairs separate from mainnet
+- ✅ Test thoroughly before mainnet
+
+### Production (Mainnet)
+Before deploying to mainnet:
+1. **Security audit** - Get professional review
+2. **Real USDC mint** - Use actual USDC: `EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v`
+3. **Hardware wallet** - For admin keys
+4. **Monitoring** - Set up real-time alerts
+5. **Testing** - Extensive devnet testing first
+
+---
+
+## 📁 Project Structure
+
+```
+brb-stablecoin/
+├── programs/brb-treasury/src/lib.rs  # Main program
+├── tests/brb-treasury.ts             # Test suite
+├── cli/treasury-cli.js               # CLI tool
+├── Dockerfile                        # Docker image definition
+├── docker-compose.yml                # Docker orchestration
+├── docker-dev.ps1                    # Docker helper functions
+├── docker-build.ps1                  # Quick Docker build
+├── docker-test.ps1                   # Quick Docker test
+├── Anchor.toml                       # Config (Anchor 0.30.1)
+├── rust-toolchain.toml               # Rust 1.79.0
+├── DOCKER.md                         # Docker setup guide
+├── SETUP.md                          # WSL2 setup guide
+└── README.md                         # This file
+```
+
+---
 
 ## License
 
-MIT License - See LICENSE file for details.
+MIT License
+
+---
+
+**Built with ❤️ by Cornell Blockchain Club**
